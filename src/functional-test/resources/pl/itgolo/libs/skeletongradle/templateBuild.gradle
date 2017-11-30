@@ -1,0 +1,9 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath '{{projectGroup}}:{{projectArtifact}}:{{projectVersion}}'
+    }
+}
+apply plugin: '{{pluginId}}'

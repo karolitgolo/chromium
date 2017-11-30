@@ -1,7 +1,5 @@
 /.gradle
 /.idea
-/gradle
-!/gradle/wrapper/gradle-wrapper.properties
 /build
 /out
 /app/temp

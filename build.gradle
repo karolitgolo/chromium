@@ -1,19 +1,63 @@
 plugins {
-    id "pl.itgolo.libs.skeletongradle"
+    id 'org.unbroken-dome.test-sets' version '1.4.2'
+    id 'com.gradle.plugin-publish' version '0.9.7'
+    id 'java-gradle-plugin'
+    id 'maven-publish'
 }
-group 'pl.itgolo.libs'
-version '1.0.0.0'
+
+group projectGroup
+version projectVersion
 
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
+}
+
+testSets {
+    integrationTest { dirName = 'integration-test' }
+    functionalTest { dirName = 'functional-test' }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile gradleTestKit()
     compile gradleApi()
+}
+
+gradlePlugin {
+    plugins {
+        "${projectArtifact}Plugin" {
+            id = pluginId
+            implementationClass = pluginClass
+        }
+    }
+}
+
+pluginBundle {
+    website = url
+    vcsUrl = scm
+    tags = ((String) projectTags).split(";")
+
+    plugins {
+        "${projectArtifact}Plugin" {
+            displayName = displayName
+            description = description
+            id          = pluginId
+        }
+    }
+}
+
+publishing {
+    publications {
+        pluginPublication (MavenPublication) {
+            from        components.java
+            groupId     projectGroup
+            artifactId  projectArtifact
+            version     projectVersion
+        }
+    }
 }
