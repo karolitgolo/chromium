@@ -112,4 +112,14 @@ public abstract class PluginFunctionalTest {
         createTempBuildGradleFile(resource);
         return GradleRunner.create().withProjectDir(testProjectDir.getRoot());
     }
+
+    public GradleRunner createGradleRunner(String resource, Map<Object, Object> properties) throws IOException {
+        for (Map.Entry<Object, Object> propertyEntry : properties.entrySet()) {
+            String key = (String) propertyEntry.getKey();
+            String value = (String) propertyEntry.getValue();
+            props.setProperty(key, value);
+        }
+        createTempBuildGradleFile(resource);
+        return GradleRunner.create().withProjectDir(testProjectDir.getRoot());
+    }
 }
