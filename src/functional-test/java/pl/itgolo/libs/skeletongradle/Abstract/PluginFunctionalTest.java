@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * The type Plugin test.
+ * The type Plugin functional test.
  */
 public abstract class PluginFunctionalTest {
 
@@ -33,6 +33,11 @@ public abstract class PluginFunctionalTest {
      * The Props.
      */
     protected Properties props;
+
+    /**
+     * The Env.
+     */
+    protected Properties env;
 
     /**
      * The Test project dir.
@@ -51,6 +56,10 @@ public abstract class PluginFunctionalTest {
         testBuildGradleFile = testProjectDir.newFile("build.gradle");
         props = new Properties();
         props.load(new FileInputStream("gradle.properties"));
+        if (Files.exists(Paths.get("env.properties"))){
+            env = new Properties();
+            env.load(new FileInputStream("env.properties"));
+        }
         publishToMavenLocal();
     }
 
@@ -63,7 +72,7 @@ public abstract class PluginFunctionalTest {
      * @throws IOException the io exception
      */
     protected static String buildFromTemplateResource(String resource, Properties props) throws IOException {
-        String path = URLDecoder.decode(new File("src/functional-test/resources/" + resource).getCanonicalPath(), "UTF-8");
+        String path = URLDecoder.decode(new File(resource).getCanonicalPath(), "UTF-8");
         String template =  new String(Files.readAllBytes(Paths.get(path)));
         for (Map.Entry<Object, Object> propertyEntry : props.entrySet()) {
             String key = propertyEntry.getKey().toString();
@@ -113,6 +122,14 @@ public abstract class PluginFunctionalTest {
         return GradleRunner.create().withProjectDir(testProjectDir.getRoot());
     }
 
+    /**
+     * Create gradle runner gradle runner.
+     *
+     * @param resource   the resource
+     * @param properties the properties
+     * @return the gradle runner
+     * @throws IOException the io exception
+     */
     public GradleRunner createGradleRunner(String resource, Map<Object, Object> properties) throws IOException {
         for (Map.Entry<Object, Object> propertyEntry : properties.entrySet()) {
             String key = (String) propertyEntry.getKey();
@@ -121,5 +138,24 @@ public abstract class PluginFunctionalTest {
         }
         createTempBuildGradleFile(resource);
         return GradleRunner.create().withProjectDir(testProjectDir.getRoot());
+    }
+
+    /**
+     * Props to map map.
+     *
+     * @param file the file
+     * @param map  the map
+     * @return the map
+     * @throws IOException the io exception
+     */
+    protected Map<Object, Object> propsToMap(String file, Map<Object, Object> map) throws IOException {
+        Properties props = new Properties();
+        props.load(new FileInputStream(file));
+        for (Map.Entry<Object, Object> propertyEntry : props.entrySet()) {
+            String key = propertyEntry.getKey().toString();
+            String value = propertyEntry.getValue().toString();
+            map.put(key, value);
+        }
+        return map;
     }
 }

@@ -20,7 +20,7 @@ public class GreetingPluginTest extends PluginFunctionalTest {
      */
     @Test
     public void systemOutResultTaskHello() throws Exception {
-        BuildResult result = createGradleRunner("pl/itgolo/libs/skeletongradle/templateBuild.gradle")
+        BuildResult result = createGradleRunner("src/functional-test/resources/pl/itgolo/libs/skeletongradle/templateBuild.gradle")
                 .withArguments("hello", "--stacktrace")
                 .withDebug(true)
                 .build();
@@ -31,7 +31,7 @@ public class GreetingPluginTest extends PluginFunctionalTest {
     public void extensionGreetingPluginWithPropertyInBuildGradleFile() throws Exception {
         Map<Object, Object> templateProps = new HashMap<>();
         templateProps.put("greetingMessage", "Hi from Gradle");
-        BuildResult result = createGradleRunner("pl/itgolo/libs/skeletongradle/templateBuildWithExtension.gradle", templateProps)
+        BuildResult result = createGradleRunner("src/functional-test/resources/pl/itgolo/libs/skeletongradle/templateBuildWithExtension.gradle", templateProps)
                 .withArguments("hello", "--stacktrace")
                 .withDebug(true)
                 .build();
@@ -40,7 +40,7 @@ public class GreetingPluginTest extends PluginFunctionalTest {
 
     @Test
     public void taskGreetingExecuteFromBuildGradleFile() throws Exception {
-        BuildResult result = createGradleRunner("pl/itgolo/libs/skeletongradle/templateBuildWithTask.gradle")
+        BuildResult result = createGradleRunner("src/functional-test/resources/pl/itgolo/libs/skeletongradle/templateBuildWithTask.gradle")
                 .withArguments("helloTask", "--stacktrace")
                 .withDebug(true)
                 .build();
@@ -49,7 +49,7 @@ public class GreetingPluginTest extends PluginFunctionalTest {
 
     @Test
     public void taskGreetingWithoutBuildGradle() throws Exception {
-        BuildResult result = createGradleRunner("pl/itgolo/libs/skeletongradle/templateBuild.gradle")
+        BuildResult result = createGradleRunner("src/functional-test/resources/pl/itgolo/libs/skeletongradle/templateBuild.gradle")
                 .withArguments("hello2", "--stacktrace")
                 .withDebug(true)
                 .build();

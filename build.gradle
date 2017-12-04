@@ -6,23 +6,11 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
 }
 
-group projectGroup
-version projectVersion
-
-apply plugin: 'java'
-
-Properties env = new Properties()
-env.load(new FileInputStream("env.properties"))
-sourceCompatibility = 1.8
+apply from: 'gradle/extend.gradle'
 
 repositories {
     jcenter()
     mavenCentral()
-}
-
-testSets {
-    integrationTest { dirName = 'integration-test' }
-    functionalTest { dirName = 'functional-test' }
 }
 
 dependencies {
@@ -30,62 +18,3 @@ dependencies {
     testCompile gradleTestKit()
     compile gradleApi()
 }
-
-gradlePlugin {
-    plugins {
-        "${projectArtifact}Plugin" {
-            id = pluginId
-            implementationClass = pluginClass
-        }
-    }
-}
-
-bintray {
-    user = bintrayUser
-    key = env.getProperty("BINTRAY_APIKEY")
-    publish = true
-    pkg {
-        repo = bintrayRepository
-        name = projectArtifact
-        desc = description
-        userOrg = bintrayUser
-        licenses = ((String) projectLicenses).split(";")
-        vcsUrl = scm
-        labels = ((String) projectTags).split(";")
-        publicDownloadNumbers = true
-        websiteUrl = url
-    }
-    publications = ['pluginPublication']
-}
-
-pluginBundle {
-    website = url
-    vcsUrl = scm
-    tags = ((String) projectTags).split(";")
-    plugins {
-        "${projectArtifact}Plugin" {
-            displayName = displayName
-            description = description
-            id = pluginId
-        }
-    }
-}
-
-publishing {
-    publications {
-        pluginPublication(MavenPublication) {
-            from components.java
-            groupId projectGroup
-            artifactId projectArtifact
-            version projectVersion
-        }
-    }
-}
-functionalTest.dependsOn clean
-bintrayUpload.dependsOn test
-bintrayUpload.dependsOn integrationTest
-bintrayUpload.dependsOn functionalTest
-functionalTest.mustRunAfter integrationTest
-integrationTest.mustRunAfter test
-test.mustRunAfter clean
-

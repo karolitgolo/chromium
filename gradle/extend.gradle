@@ -1,0 +1,98 @@
+
+group projectGroup
+version projectVersion
+
+apply plugin: 'java'
+
+Properties env = new Properties()
+env.load(new FileInputStream("env.properties"))
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+testSets {
+    integrationTest { dirName = 'integration-test' }
+    functionalTest { dirName = 'functional-test' }
+}
+
+test.outputs.upToDateWhen {false}
+integrationTest.outputs.upToDateWhen {false}
+functionalTest.outputs.upToDateWhen {false}
+
+gradlePlugin {
+    plugins {
+        "${projectArtifact}Plugin" {
+            id = pluginId
+            implementationClass = pluginClass
+        }
+    }
+}
+
+sourceSets {
+    functionalTest {
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+    integrationTest {
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = env.getProperty("BINTRAY_APIKEY")
+    publish = true
+    pkg {
+        repo = bintrayRepository
+        name = projectArtifact
+        desc = pluginDescription
+        userOrg = bintrayUser
+        licenses = ((String) projectLicenses).split(";")
+        vcsUrl = pluginScm
+        labels = ((String) projectTags).split(";")
+        publicDownloadNumbers = true
+        websiteUrl = pluginUrl
+    }
+    publications = ['pluginPublication']
+}
+
+pluginBundle {
+    website = pluginUrl
+    vcsUrl = pluginScm
+    tags = ((String) projectTags).split(";")
+    plugins {
+        "${projectArtifact}Plugin" {
+            displayName = pluginDisplayName
+            description = pluginDescription
+            id = pluginId
+            version = projectVersion
+        }
+    }
+}
+
+publishing {
+    publications {
+        pluginPublication(MavenPublication) {
+            from components.java
+            groupId projectGroup
+            artifactId projectArtifact
+            version projectVersion
+        }
+    }
+}
+
+task publishPluginJCenter(dependsOn: ['clean', 'test', 'integrationTest', 'functionalTest', 'publishPlugins']){
+    test.mustRunAfter clean
+    integrationTest.mustRunAfter test
+    functionalTest.mustRunAfter integrationTest
+    publishPlugins.mustRunAfter functionalTest
+}
+
+task publishPluginBintray(dependsOn: ['clean', 'test', 'integrationTest', 'functionalTest', 'bintrayUpload']){
+    test.mustRunAfter clean
+    integrationTest.mustRunAfter test
+    functionalTest.mustRunAfter integrationTest
+    publishPlugins.mustRunAfter functionalTest
+}
