@@ -38,6 +38,13 @@ sourceSets {
             srcDir 'src/main/java'
         }
     }
+    main {
+        resources {
+            srcDirs = ["src/main/java", "src/main/resources"]
+            includes = ["**/*.fxml", "**/*.xml", "**/*.properties", "**/*.css", "**/*.json", "**/*.sql",
+                        "**/*.png", "**/*.gif", "**/*.jpg", "**/*.ico", "**/*.html", "**/*.js", "**/*.jrxml"]
+        }
+    }
 }
 
 bintray {
