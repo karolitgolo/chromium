@@ -1,0 +1,50 @@
+Properties env = new Properties()
+env.load(new FileInputStream("env.properties"))
+
+UpdatePlugin {
+    dirReleaseUnpackAppFiles = "$buildDir/output/app"
+    remoteDirApp = env.getProperty("APP_FTP_DIR")
+    newVersion = projectVersion
+    ftpHost = env.getProperty("APP_FTP_HOST")
+    ftpUser = env.getProperty("APP_FTP_USER")
+    ftpPassword = env.getProperty("APP_FTP_PASSWORD")
+    urlApp = env.getProperty("APP_URL_DIR")
+    forceUpload = false
+}
+
+task createJarFile(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': appDisplayName,
+                'Implementation-Version': version,
+                'Main-Class': projectClassWithMain,
+                'Class-Path': configurations.runtime.files.collect { "app/libs/$it.name" }.join(' ')
+    }
+    baseName = project.name
+    archiveName = "${project.name}.jar"
+    with jar
+}
+
+task copyCompileLibs(type: Copy) {
+    into "$buildDir/output/app/app/libs"
+    from configurations.requireRunJar
+}
+
+task copyAppFiles() {
+    doLast {
+        copy {
+            from "$buildDir/libs"
+            into "$buildDir/output/app"
+            include "**/${project.name}.jar"
+        }
+    }
+}
+
+task publishNewVersionApp(dependsOn: ['clean', 'copyCompileLibs', 'createJarFile', 'copyAppFiles', 'test', 'integrationTest', 'functionalTest', 'deployApp']){
+    copyCompileLibs.mustRunAfter clean
+    createJarFile.mustRunAfter copyCompileLibs
+    copyAppFiles.mustRunAfter createJarFile
+    test.mustRunAfter copyAppFiles
+    integrationTest.mustRunAfter test
+    functionalTest.mustRunAfter integrationTest
+    deployApp.mustRunAfter functionalTest
+}

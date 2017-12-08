@@ -1,13 +1,16 @@
 plugins {
     id 'org.unbroken-dome.test-sets' version '1.4.2'
-    id 'com.gradle.plugin-publish' version '0.9.7'
-    id 'java-gradle-plugin'
     id 'maven-publish'
     id 'com.jfrog.bintray' version '1.7.3'
+    id 'pl.itgolo.libs.updategradle' version '1.0.0.0p'
 }
 
 apply from: 'gradle/extend.gradle'
 
+
+configurations{
+    requireRunJar
+}
 repositories {
     jcenter()
     mavenCentral()
@@ -15,6 +18,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile gradleTestKit()
-    compile gradleApi()
+    compile configurations.requireRunJar
 }
+
+apply from: 'gradle/update.gradle'
