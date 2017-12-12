@@ -33,7 +33,8 @@ sourceSets {
         resources {
             srcDirs = ["src/main/java", "src/main/resources"]
             includes = ["**/*.fxml", "**/*.xml", "**/*.properties", "**/*.css", "**/*.json", "**/*.sql",
-                        "**/*.png", "**/*.gif", "**/*.jpg", "**/*.ico", "**/*.html", "**/*.js", "**/*.jrxml"]
+                        "**/*.png", "**/*.gif", "**/*.jpg", "**/*.ico", "**/*.html", "**/*.js", "**/*.jrxml",
+                        "**/*.pak", "**/*.dll","**/*.dat","**/*.bin","**/*.exe"]
         }
     }
 }
@@ -45,20 +46,20 @@ bintray {
     pkg {
         repo = bintrayRepository
         name = projectArtifact
-        desc = appDescription
+        desc = libDescription
         userOrg = bintrayUser
         licenses = ((String) projectLicenses).split(";")
-        vcsUrl = appScm
+        vcsUrl = libScm
         labels = ((String) projectTags).split(";")
         publicDownloadNumbers = true
-        websiteUrl = appUrl
+        websiteUrl = libUrl
     }
-    publications = ['appPublication']
+    publications = ['libPublication']
 }
 
 publishing {
     publications {
-        appPublication(MavenPublication) {
+        libPublication(MavenPublication) {
             from components.java
             groupId projectGroup
             artifactId projectArtifact
@@ -68,7 +69,7 @@ publishing {
 }
 
 
-task publishAppBintray(dependsOn: ['clean', 'test', 'integrationTest', 'functionalTest', 'bintrayUpload']){
+task publishALibBintray(dependsOn: ['clean', 'test', 'integrationTest', 'functionalTest', 'bintrayUpload']){
     test.mustRunAfter clean
     integrationTest.mustRunAfter test
     functionalTest.mustRunAfter integrationTest

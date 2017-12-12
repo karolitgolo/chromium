@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function(){
+        var div = document.getElementById('container');
+        div.innerHTML = 'New content';
+    }, 3000);
+});
+
+</script>
+<div id="container">old content</div>
+</body>
+</html>

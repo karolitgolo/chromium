@@ -7,18 +7,26 @@ plugins {
 
 apply from: 'gradle/extend.gradle'
 
-
 configurations{
     requireRunJar
 }
+
 repositories {
     jcenter()
     mavenCentral()
+    maven {
+        url "http://dl.bintray.com/itgolo/libs"
+    }
 }
 
 dependencies {
+    requireRunJar group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
+    requireRunJar group: 'org.codehaus.plexus', name: 'plexus-utils', version: '3.1.0'
+    requireRunJar group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+    requireRunJar group: 'com.airhacks', name: 'afterburner.fx', version: '1.7.0'
+    requireRunJar group: 'pl.itgolo.libs', name: 'chromiumresources', version: '1.+'
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta0'
+    testCompile group: 'com.sparkjava', name: 'spark-core', version: '2.7.1'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile configurations.requireRunJar
 }
-
-apply from: 'gradle/update.gradle'
