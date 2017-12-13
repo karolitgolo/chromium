@@ -35,21 +35,20 @@ public class NavigateToAction {
     public void launch(String url, Integer timeout, Integer attempts, Integer sleepAttemptMilliseconds) throws ChromiumException {
         System.out.println("Load url: " + url);
         StringProperty source = new SimpleStringProperty();
-        for (Integer i = 0 ; i <attempts ; i++){
+        for (Integer i = 0 ; i <=attempts ; i++){
             try {
                 browser.getJFrame().cefBrowser.stopLoad();
                 browser.getJFrame().cefBrowser.loadURL(url);
                 waitLoad(url, source, timeout);
                 break;
             } catch (Exception e) {
-                if (i.equals(attempts - 1)){
+                if (i.equals(attempts)){
                     throw new ChromiumException(e);
                 }
-                System.out.println("Attempt navigate to url: " + i + 1);
+                System.out.println("Attempt navigate to url: " + (i + 1));
                 NavigateToAction.sleep(sleepAttemptMilliseconds);
             }
         }
-        System.out.println("Loaded");
     }
 
     private void waitLoad(String url, StringProperty source, Integer timeout) throws ChromiumException {

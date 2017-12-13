@@ -121,6 +121,7 @@ public class BrowserJFrame extends JFrame {
         CefMessageRouter msgRouter = CefMessageRouter.create();
         msgRouter.addHandler(new MessageRouterHandler(), true);
         msgRouter.addHandler(new MessageRouterHandlerEx(cefClient), false);
+        msgRouter.addHandler(new MessageRouterReturnJSHandler(cefClient), false);
         cefClient.addMessageRouter(msgRouter);
         cefClient.addDisplayHandler(new CefDisplayHandlerAdapter() {
             @Override

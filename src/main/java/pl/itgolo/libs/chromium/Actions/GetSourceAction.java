@@ -33,7 +33,6 @@ public class GetSourceAction {
      * @throws ChromiumException the chromium exception
      */
     public String launch(Integer timeout, Integer attempts, Integer sleepAttemptMilliseconds) throws ChromiumException {
-        System.out.println("Get source");
         StringProperty source = new SimpleStringProperty();
         for (Integer i = 0 ; i <attempts ; i++){
             try {
@@ -47,7 +46,6 @@ public class GetSourceAction {
                 NavigateToAction.sleep(sleepAttemptMilliseconds);
             }
         }
-        System.out.println("Finished");
         return source.get();
     }
 
@@ -60,7 +58,8 @@ public class GetSourceAction {
                 }
             }
         };
-        for (int i =0 ; i < timeout * 10 ; i++){
+        final Integer waitTimeout = (timeout.equals(0)) ? 2 : timeout;
+        for (int i =0 ; i < waitTimeout * 10 ; i++){
             browser.getJFrame().cefBrowser.getSource(cefStringVisitor);
             if (source.get() != null){
                 break;

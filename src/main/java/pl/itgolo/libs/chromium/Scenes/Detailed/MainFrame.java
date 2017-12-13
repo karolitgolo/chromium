@@ -135,6 +135,7 @@ public class MainFrame extends JFrame {
         client_.addDragHandler(new DragHandler());
         client_.addGeolocationHandler(new GeolocationHandler(this));
         client_.addJSDialogHandler(new JSDialogHandler());
+
         client_.addKeyboardHandler(new KeyboardHandler());
         client_.addRequestHandler(new RequestHandler(this));
 

@@ -2,9 +2,7 @@ package pl.itgolo.libs.chromium;
 
 import org.cef.CefApp;
 import org.junit.Test;
-import pl.itgolo.libs.chromium.Actions.NavigateToActionTest;
-import pl.itgolo.libs.chromium.Actions.NavigateToAjaxTest;
-import pl.itgolo.libs.chromium.Actions.NavigateToTimeoutTest;
+import pl.itgolo.libs.chromium.Actions.*;
 import pl.itgolo.libs.chromium.Interfaces.IBrowserTest;
 import spark.Spark;
 
@@ -25,7 +23,20 @@ public class BrowserSequenceFixTest {
         browserTests = Arrays.asList(
                 new NavigateToActionTest(),
                 new NavigateToAjaxTest(),
-                new NavigateToTimeoutTest()
+                new NavigateToTimeoutTest(),
+                new NavigateToAttemptTest(),
+                new ExecuteScriptTest(),
+                new SetAttributeTest(),
+                new GetElementsEmptyTest(),
+                new GetElementsTest(),
+                new FillInputTest(),
+                new FillTextAreaTest(),
+                new SelectRadioTest(),
+                new SelectRadioTest(),
+                new SelectCheckBoxTest(),
+                new SelectOptionTest(),
+                new ClickTest(),
+                new ClickReloadTest()
         );
     }
 

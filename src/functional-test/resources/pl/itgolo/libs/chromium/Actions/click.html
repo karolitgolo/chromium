@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('button').addEventListener("click", myScript);
+});
+function myScript() {
+    var div = document.getElementById('container');
+    div.innerHTML = 'New content';
+}
+</script>
+<div id="container">old content</div>
+<a id="button">Click</a>
+</body>
+</html>

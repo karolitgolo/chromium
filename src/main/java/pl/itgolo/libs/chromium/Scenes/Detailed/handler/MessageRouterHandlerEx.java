@@ -28,6 +28,7 @@ public class MessageRouterHandlerEx extends CefMessageRouterHandlerAdapter {
                          String request,
                          boolean persistent,
                          CefQueryCallback callback) {
+    System.out.println("weg");
     if (request.startsWith("hasExtension")) {
       if (router_ != null)
         callback.success("");
@@ -64,6 +65,7 @@ public class MessageRouterHandlerEx extends CefMessageRouterHandlerAdapter {
                            String request,
                            boolean persistent,
                            CefQueryCallback callback) {
+      System.out.println("test");
       if (request.startsWith("jcefJava")) {
         callback.success(System.getProperty("java.version"));
         return true;

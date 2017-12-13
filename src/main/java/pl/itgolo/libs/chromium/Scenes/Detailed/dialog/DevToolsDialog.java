@@ -4,15 +4,12 @@
 
 package pl.itgolo.libs.chromium.Scenes.Detailed.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Frame;
-import java.awt.Point;
+import org.cef.browser.CefBrowser;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
-import javax.swing.JDialog;
-
-import org.cef.browser.CefBrowser;
 
 @SuppressWarnings("serial")
 public class DevToolsDialog extends JDialog {
@@ -30,6 +27,7 @@ public class DevToolsDialog extends JDialog {
     setLocation(owner.getLocation().x+20, owner.getLocation().y+20);
 
     devTools_ = browser.getDevTools(inspectAt);
+
     add(devTools_.getUIComponent());
 
     addComponentListener(new ComponentAdapter() {

@@ -20,6 +20,9 @@ repositories {
 }
 
 dependencies {
+    compile group: 'net.java.dev.jna', name: 'jna', version: '4.2.2'
+    compile group: 'net.java.dev.jna', name: 'jna-platform', version: '4.5.0'
+
     requireRunJar group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     requireRunJar group: 'org.codehaus.plexus', name: 'plexus-utils', version: '3.1.0'
     requireRunJar group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
