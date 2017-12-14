@@ -69,9 +69,10 @@ publishing {
 }
 
 
-task publishALibBintray(dependsOn: ['clean', 'test', 'integrationTest', 'functionalTest', 'bintrayUpload']){
-    test.mustRunAfter clean
+task publishLibBintray(dependsOn: ['clean', 'assemble', 'test', 'integrationTest', 'functionalTest']){
+    assemble.mustRunAfter clean
+    test.mustRunAfter assemble
     integrationTest.mustRunAfter test
     functionalTest.mustRunAfter integrationTest
-    bintrayUpload.mustRunAfter functionalTest
+   bintrayUpload.mustRunAfter functionalTest
 }

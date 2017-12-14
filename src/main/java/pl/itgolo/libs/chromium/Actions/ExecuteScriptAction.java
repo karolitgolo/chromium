@@ -3,6 +3,7 @@ package pl.itgolo.libs.chromium.Actions;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
 import pl.itgolo.libs.chromium.Scenes.Detailed.handler.MessageRouterReturnJSHandler;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Execute script action.
@@ -22,12 +23,16 @@ public class ExecuteScriptAction {
     }
 
     /**
-     * Launch.
+     * Launch string.
      *
-     * @param script the script
+     * @param script         the script
+     * @param objectJSReturn the object js return
+     * @param timeout        the timeout
+     * @return the string
      * @throws ChromiumException the chromium exception
      */
     public String launch(String script, String objectJSReturn, Integer timeout) throws ChromiumException {
+        LogService.debug("Action execute script");
         MessageRouterReturnJSHandler.returnsJS.remove(browser.getJFrame().cefBrowser.getIdentifier());
         script = (script.trim().endsWith(";")) ? script : script+ ";";
         objectJSReturn = (objectJSReturn.trim().endsWith(";")) ? objectJSReturn : objectJSReturn+ ";";

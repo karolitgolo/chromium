@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Get element action.
@@ -36,6 +37,7 @@ public class GetElementAction {
      * @throws ChromiumException the chromium exception
      */
     public Element launch(String cssSelector, Integer timeout, Integer sleepBetweenCheckMilliseconds) throws ChromiumException {
+        LogService.debug("Action get element in css selector: " + cssSelector);
         IntegerProperty countTimeoutProperty = new SimpleIntegerProperty(0);
         if (timeout.equals(0)){
             return getElement(cssSelector, 0, countTimeoutProperty);

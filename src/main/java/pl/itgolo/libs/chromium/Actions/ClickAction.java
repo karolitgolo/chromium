@@ -3,6 +3,7 @@ package pl.itgolo.libs.chromium.Actions;
 import org.jsoup.nodes.Element;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Click action.
@@ -28,6 +29,7 @@ public class ClickAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector) throws ChromiumException {
+        LogService.debug("Action click in css selector: " + cssSelector);
         Element element = browser.actions.getElement(cssSelector, 0, 50);
         if (element == null){
             throw new ChromiumException("Can not find element with css selector: " + cssSelector);

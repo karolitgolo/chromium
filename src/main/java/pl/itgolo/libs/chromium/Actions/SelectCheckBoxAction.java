@@ -4,9 +4,10 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
- * The type Fill input action.
+ * The type Select check box action.
  */
 public class SelectCheckBoxAction {
 
@@ -14,7 +15,7 @@ public class SelectCheckBoxAction {
 
 
     /**
-     * Instantiates a new Fill input action.
+     * Instantiates a new Select check box action.
      *
      * @param browser the browser
      */
@@ -26,11 +27,11 @@ public class SelectCheckBoxAction {
      * Launch.
      *
      * @param cssSelector the css selector
-     * @param value       the value
-     * @param timeout     the timeout
+     * @param checked     the checked
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, Boolean checked) throws ChromiumException {
+        LogService.debug("Action select checkbox in css selector: " + cssSelector);
         executeScript(cssSelector, checked);
         Element element = browser.actions.getElement(cssSelector, 0, 50);
         Boolean validateChecked = false;

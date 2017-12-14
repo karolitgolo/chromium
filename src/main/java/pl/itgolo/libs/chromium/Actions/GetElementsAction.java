@@ -5,9 +5,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
- * The type Get element action.
+ * The type Get elements action.
  */
 public class GetElementsAction {
 
@@ -15,7 +16,7 @@ public class GetElementsAction {
 
 
     /**
-     * Instantiates a new Get element action.
+     * Instantiates a new Get elements action.
      *
      * @param browser the browser
      */
@@ -24,15 +25,16 @@ public class GetElementsAction {
     }
 
     /**
-     * Launch element.
+     * Launch elements.
      *
      * @param cssSelector                   the css selector
      * @param timeout                       the timeout
      * @param sleepBetweenCheckMilliseconds the sleep between check milliseconds
-     * @return the element
+     * @return the elements
      * @throws ChromiumException the chromium exception
      */
     public Elements launch(String cssSelector, Integer timeout, Integer sleepBetweenCheckMilliseconds) throws ChromiumException {
+        LogService.debug("Action get elements in css selector: " + cssSelector);
         Integer countTimeout = 0;
         if (timeout.equals(0)){
             String dom = browser.actions.getSource();

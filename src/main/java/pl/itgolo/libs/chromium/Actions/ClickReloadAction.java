@@ -2,6 +2,7 @@ package pl.itgolo.libs.chromium.Actions;
 
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Click reload action.
@@ -28,6 +29,7 @@ public class ClickReloadAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, Integer timeout) throws ChromiumException {
+        LogService.debug("Action click and reload in css selector: " + cssSelector);
         browser.actions.executeScript("var cefClickReloaded = false;");
         browser.actions.click(cssSelector);
         Boolean beginReload = false;

@@ -35,7 +35,7 @@ import java.io.IOException;
 public class BrowserJFrame extends JFrame {
 
     /**
-     * The constant loadEndProperty.
+     * The constant isLoadingProperty.
      */
     public static BooleanProperty isLoadingProperty = new SimpleBooleanProperty(false);
 
@@ -43,6 +43,7 @@ public class BrowserJFrame extends JFrame {
      * The Cef client.
      */
     public final CefClient cefClient;
+    public final ConfigurationBrowser configurationBrowser;
 
     /**
      * The Error msg.
@@ -98,24 +99,88 @@ public class BrowserJFrame extends JFrame {
     /**
      * Instantiates a new Browser j frame.
      *
-     * @param profileName the profile name
-     * @param dirChromium the dir chromium
+     * @param profileName          the profile name
+     * @param dirChromium          the dir chromium
+     * @param configurationBrowser the configuration browser
      */
-    public BrowserJFrame(String profileName, File dirChromium) {
+    public BrowserJFrame(String profileName, File dirChromium, ConfigurationBrowser configurationBrowser) {
         this.dirChromium = dirChromium;
         this.profileName = profileName;
         setCookiesPath(dirChromium);
+        this.configurationBrowser = configurationBrowser;
         CefSettings settings = BrowserFactory.getCefSettings(dirChromium, this.profileName);
         CefApp.addAppHandler(new AppHandler(new String[]{}));
         cefApp = CefApp.getInstance(settings);
         fixDeleteDatabasesIncognitoDir();
         cefClient = cefApp.createClient();
         DownloadDialog downloadDialog = new DownloadDialog(this);
+        configCefClient(downloadDialog);
+        CefRequestContext requestContext = null;
+        if (cookiePath != null) {
+            cefCookieManager = CefCookieManager.createManager(cookiePath, true);
+            requestContext = CefRequestContext.createContext(
+                    new CefRequestContextHandlerAdapter() {
+                        @Override
+                        public CefCookieManager getCookieManager() {
+                            return cefCookieManager;
+                        }
+                    });
+        } else {
+            cefCookieManager = CefCookieManager.getGlobalManager();
+
+        }
+
+        cefBrowser = cefClient.createBrowser("about:blank",
+                OS.isLinux(),
+                false,
+                requestContext);
+        getContentPane().add(createContentPanel(), BorderLayout.CENTER);
+        MyMenuBar menuBar = new MyMenuBar(this,
+                cefBrowser,
+                controlPane,
+                downloadDialog,
+                cefCookieManager);
+
+        menuBar.addBookmark("Binding Test", "client://tests/binding_test.html");
+        menuBar.addBookmark("Binding Test 2", "client://tests/binding_test2.html");
+        menuBar.addBookmark("Download Test", "http://cefbuilds.com");
+        menuBar.addBookmark("Geolocation Test", "http://slides.html5rocks.com/#geolocation");
+        menuBar.addBookmark("Login Test (username:pumpkin, password:pie)", "http://www.colostate.edu/~ric/protect/your.html");
+        menuBar.addBookmark("Certificate-error Test", "https://www.k2go.de");
+        menuBar.addBookmark("Resource-Handler Test", "http://www.foo.bar/");
+        menuBar.addBookmark("Scheme-Handler Test 1: (scheme \"client\")", "client://tests/handler.html");
+        menuBar.addBookmark("Scheme-Handler Test 2: (scheme \"search\")", "search://do a barrel roll/");
+        menuBar.addBookmark("Spellcheck test", "client://tests/spellcheck.html");
+        menuBar.addBookmark("Test local Storage", "client://tests/localstorage.html");
+        menuBar.addBookmarkSeparator();
+        menuBar.addBookmark("javachromiumembedded", "https://bitbucket.org/chromiumembedded/java-cef");
+        menuBar.addBookmark("chromiumembedded", "https://bitbucket.org/chromiumembedded/cef");
+        setJMenuBar(menuBar);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                CefApp.getInstance().dispose();
+                cefApp.shutdownFix();
+                dispose();
+            }
+
+        });
+        setSize(1100, 700);
+        if (this.configurationBrowser.getEnableVisible()){
+            setVisible(true);
+        }
+    }
+
+    private void configCefClient(DownloadDialog downloadDialog) {
         cefClient.addContextMenuHandler(new ContextMenuHandler(this));
         cefClient.addDownloadHandler(downloadDialog);
         cefClient.addDragHandler(new DragHandler());
-        cefClient.addGeolocationHandler(new GeolocationHandler(this));
-        cefClient.addJSDialogHandler(new JSDialogHandler());
+        if (this.configurationBrowser.getEnableGeolocation()){
+            cefClient.addGeolocationHandler(new GeolocationHandler(this));
+        }
+        if (this.configurationBrowser.getEnableJSDialog()){
+            cefClient.addJSDialogHandler(new JSDialogHandler());
+        }
         cefClient.addKeyboardHandler(new KeyboardHandler());
         cefClient.addRequestHandler(new RequestHandler(this));
         CefMessageRouter msgRouter = CefMessageRouter.create();
@@ -181,59 +246,6 @@ public class BrowserJFrame extends JFrame {
 
             }
         });
-        CefRequestContext requestContext = null;
-        if (cookiePath != null) {
-            cefCookieManager = CefCookieManager.createManager(cookiePath, true);
-            requestContext = CefRequestContext.createContext(
-                    new CefRequestContextHandlerAdapter() {
-                        @Override
-                        public CefCookieManager getCookieManager() {
-                            return cefCookieManager;
-                        }
-                    });
-        } else {
-            cefCookieManager = CefCookieManager.getGlobalManager();
-
-        }
-
-        cefBrowser = cefClient.createBrowser("about:blank",
-                OS.isLinux(),
-                false,
-                requestContext);
-        getContentPane().add(createContentPanel(), BorderLayout.CENTER);
-        MyMenuBar menuBar = new MyMenuBar(this,
-                cefBrowser,
-                controlPane,
-                downloadDialog,
-                cefCookieManager);
-
-        menuBar.addBookmark("Binding Test", "client://tests/binding_test.html");
-        menuBar.addBookmark("Binding Test 2", "client://tests/binding_test2.html");
-        menuBar.addBookmark("Download Test", "http://cefbuilds.com");
-        menuBar.addBookmark("Geolocation Test", "http://slides.html5rocks.com/#geolocation");
-        menuBar.addBookmark("Login Test (username:pumpkin, password:pie)", "http://www.colostate.edu/~ric/protect/your.html");
-        menuBar.addBookmark("Certificate-error Test", "https://www.k2go.de");
-        menuBar.addBookmark("Resource-Handler Test", "http://www.foo.bar/");
-        menuBar.addBookmark("Scheme-Handler Test 1: (scheme \"client\")", "client://tests/handler.html");
-        menuBar.addBookmark("Scheme-Handler Test 2: (scheme \"search\")", "search://do a barrel roll/");
-        menuBar.addBookmark("Spellcheck test", "client://tests/spellcheck.html");
-        menuBar.addBookmark("Test local Storage", "client://tests/localstorage.html");
-        menuBar.addBookmarkSeparator();
-        menuBar.addBookmark("javachromiumembedded", "https://bitbucket.org/chromiumembedded/java-cef");
-        menuBar.addBookmark("chromiumembedded", "https://bitbucket.org/chromiumembedded/cef");
-        setJMenuBar(menuBar);
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                CefApp.getInstance().dispose();
-                cefApp.shutdownFix();
-                dispose();
-            }
-
-        });
-        setSize(800, 600);
-        setVisible(true);
-
     }
 
     private void fixDeleteDatabasesIncognitoDir() {

@@ -4,9 +4,10 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
- * The type Fill input action.
+ * The type Select radio action.
  */
 public class SelectRadioAction {
 
@@ -14,7 +15,7 @@ public class SelectRadioAction {
 
 
     /**
-     * Instantiates a new Fill input action.
+     * Instantiates a new Select radio action.
      *
      * @param browser the browser
      */
@@ -27,10 +28,10 @@ public class SelectRadioAction {
      *
      * @param cssSelector the css selector
      * @param value       the value
-     * @param timeout     the timeout
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, String value) throws ChromiumException {
+        LogService.debug("Action select radio in css selector: " + cssSelector);
         cssSelector = cssSelector + "[value='"+value+"']";
         executeScript(cssSelector);
         Element element = browser.actions.getElement(cssSelector, 0, 50);

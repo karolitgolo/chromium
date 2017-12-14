@@ -3,7 +3,9 @@ package pl.itgolo.libs.chromium;
 import org.cef.CefApp;
 import org.junit.Test;
 import pl.itgolo.libs.chromium.Actions.*;
+import pl.itgolo.libs.chromium.Classes.LogOutConsole;
 import pl.itgolo.libs.chromium.Interfaces.IBrowserTest;
+import pl.itgolo.libs.chromium.Services.LogService;
 import spark.Spark;
 
 import java.util.Arrays;
@@ -47,13 +49,12 @@ public class BrowserSequenceFixTest {
      */
     @Test
     public void sequenceTests() throws Exception {
+        LogService.logOuts.addAll(Arrays.asList(new LogOutConsole()));
         declareBrowserTests();
         for (IBrowserTest browserTest : browserTests) {
             browserTest.before();
         }
         Spark.awaitInitialization();
-
-        System.out.println("browser create");
         Browser browser = new Browser();
         for (IBrowserTest browserTest : browserTests) {
             browserTest.test(browser);

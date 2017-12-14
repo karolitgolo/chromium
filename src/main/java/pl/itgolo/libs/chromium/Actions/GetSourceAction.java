@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 import org.cef.callback.CefStringVisitor;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Get source action.
@@ -33,6 +34,7 @@ public class GetSourceAction {
      * @throws ChromiumException the chromium exception
      */
     public String launch(Integer timeout, Integer attempts, Integer sleepAttemptMilliseconds) throws ChromiumException {
+        LogService.debug("Action get source");
         StringProperty source = new SimpleStringProperty();
         for (Integer i = 0 ; i <attempts ; i++){
             try {
@@ -42,7 +44,6 @@ public class GetSourceAction {
                 if (i.equals(attempts - 1)){
                     throw new ChromiumException(e);
                 }
-                System.out.println("Attempt get source: " + i + 1);
                 NavigateToAction.sleep(sleepAttemptMilliseconds);
             }
         }

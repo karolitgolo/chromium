@@ -3,6 +3,7 @@ package pl.itgolo.libs.chromium.Actions;
 import org.jsoup.nodes.Element;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Set attribute action.
@@ -31,6 +32,7 @@ public class SetAttributeAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, String attributeName, String value, Integer timeout) throws ChromiumException {
+        LogService.debug("Action set attribute in css selector: " + cssSelector);
         executeScript(cssSelector, attributeName, value);
         for (Integer i = 0; i <= timeout; i++) {
             Element element = browser.actions.getElement(cssSelector, 1, 50);

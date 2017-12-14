@@ -39,6 +39,8 @@ public class BrowserActions {
 
     private final ClickReloadAction clickReloadAction;
 
+    private final ResizeAction resizeAction;
+
     private Browser browser;
 
     /**
@@ -62,6 +64,7 @@ public class BrowserActions {
         this.selectOptionAction = new SelectOptionAction(browser);
         this.clickAction = new ClickAction(browser);
         this.clickReloadAction = new ClickReloadAction(browser);
+        this.resizeAction = new ResizeAction(browser);
     }
 
     /**
@@ -363,5 +366,16 @@ public class BrowserActions {
      */
     public void clickReload(String cssSelector, Integer timeout) throws ChromiumException {
         this.clickReloadAction.launch(cssSelector, timeout);
+    }
+
+    /**
+     * Resize.
+     *
+     * @param width  the width
+     * @param height the height
+     * @throws ChromiumException the chromium exception
+     */
+    public void resize(Integer width, Integer height) throws ChromiumException {
+        this.resizeAction.launch(width, height);
     }
 }

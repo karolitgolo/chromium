@@ -4,6 +4,7 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Select option action.
@@ -30,6 +31,7 @@ public class SelectOptionAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, String value) throws ChromiumException {
+        LogService.debug("Action select option in css selector: " + cssSelector);
         cssSelector = cssSelector + " option[value='" + value + "']";
         executeScript(cssSelector);
         Element element = browser.actions.getElement(cssSelector, 0, 50);

@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 import org.cef.callback.CefStringVisitor;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Navigate to action.
@@ -33,7 +34,7 @@ public class NavigateToAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String url, Integer timeout, Integer attempts, Integer sleepAttemptMilliseconds) throws ChromiumException {
-        System.out.println("Load url: " + url);
+        LogService.debug("Action navigate to: " + url);
         StringProperty source = new SimpleStringProperty();
         for (Integer i = 0 ; i <=attempts ; i++){
             try {
@@ -45,7 +46,6 @@ public class NavigateToAction {
                 if (i.equals(attempts)){
                     throw new ChromiumException(e);
                 }
-                System.out.println("Attempt navigate to url: " + (i + 1));
                 NavigateToAction.sleep(sleepAttemptMilliseconds);
             }
         }

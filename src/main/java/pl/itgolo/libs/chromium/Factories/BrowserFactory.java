@@ -6,6 +6,7 @@ import org.cef.CefSettings;
 import org.cef.OS;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
 import pl.itgolo.libs.chromium.Scenes.BrowserJFrame;
+import pl.itgolo.libs.chromium.Scenes.ConfigurationBrowser;
 import pl.itgolo.libs.chromiumresources.Actions.CreateBinJcef;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executors;
 @Data
 public class BrowserFactory {
 
+    private ConfigurationBrowser configurationBrowser;
     /**
      * The Profile name.
      */
@@ -33,11 +35,13 @@ public class BrowserFactory {
      *
      * @param profileName the profile name
      * @param dirChromium the dir chromium
+     * @param configurationBrowser
      * @throws ChromiumException the chromium exception
      */
-    public BrowserFactory(String profileName, File dirChromium) throws ChromiumException {
+    public BrowserFactory(String profileName, File dirChromium, ConfigurationBrowser configurationBrowser) throws ChromiumException {
         this.profileName = profileName;
         this.dirChromium = dirChromium;
+        this.configurationBrowser = configurationBrowser;
         copyChromiumFiles();
     }
 
@@ -67,7 +71,7 @@ public class BrowserFactory {
         SimpleObjectProperty<Throwable> errorCreateBrowserWindow = new SimpleObjectProperty<>();
         executorService.submit(() -> {
             try {
-                browserJFrame.set(new BrowserJFrame(this.profileName, this.dirChromium));
+                browserJFrame.set(new BrowserJFrame(this.profileName, this.dirChromium, this.configurationBrowser));
             } catch (Exception e) {
                 errorCreateBrowserWindow.set(e);
             }
@@ -76,11 +80,8 @@ public class BrowserFactory {
         if (errorCreateBrowserWindow.get() != null) {
             throw new ChromiumException(errorCreateBrowserWindow.get());
         }
-        System.out.println("Wait for load browser JFrame");
         waitForLoadBrowserJFrame();
-        System.out.println("Wait for load browser chromium");
         waitForLoadBrowserChromium(browserJFrame.get());
-        System.out.println("Loaded browser chromium");
         return browserJFrame.get();
     }
 

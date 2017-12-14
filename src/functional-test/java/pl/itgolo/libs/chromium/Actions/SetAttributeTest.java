@@ -37,7 +37,6 @@ public class SetAttributeTest extends BrowserTest implements IBrowserTest {
         browser.actions.navigateTo(sparkUrl("setAttribute"));
         browser.actions.setAttribute("#username","value", "new content");
         Element username = browser.actions.getElement("#username");
-        System.out.println(username.attr("value"));
         Assert.assertTrue(username.attr("value").equals("new content"));
 
     }

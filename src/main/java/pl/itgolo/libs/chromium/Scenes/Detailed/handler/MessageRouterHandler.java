@@ -15,7 +15,7 @@ public class MessageRouterHandler extends CefMessageRouterHandlerAdapter {
                            String request,
                            boolean persistent,
                            CefQueryCallback callback) {
-        System.out.println("REQUEST: " + request);
+        //System.out.println("REQUEST: " + request);
         if (request.indexOf("BindingTest:") == 0) {
             // Reverse the message and return it to the JavaScript caller.
             String msg = request.substring(12);

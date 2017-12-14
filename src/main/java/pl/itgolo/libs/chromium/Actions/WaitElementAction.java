@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Wait element action.
@@ -36,7 +37,7 @@ public class WaitElementAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, Integer timeout, Integer sleepBetweenCheckMilliseconds) throws ChromiumException {
-        System.out.println("Wait element");
+        LogService.debug("Action wait element in css selector: " + cssSelector);
         StringProperty source = new SimpleStringProperty();
         Integer countTimeout = 0;
         while(countTimeout < timeout * 1000){

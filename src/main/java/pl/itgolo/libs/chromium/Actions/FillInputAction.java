@@ -3,6 +3,7 @@ package pl.itgolo.libs.chromium.Actions;
 import org.jsoup.nodes.Element;
 import pl.itgolo.libs.chromium.Browser;
 import pl.itgolo.libs.chromium.Exceptions.ChromiumException;
+import pl.itgolo.libs.chromium.Services.LogService;
 
 /**
  * The type Fill input action.
@@ -30,6 +31,7 @@ public class FillInputAction {
      * @throws ChromiumException the chromium exception
      */
     public void launch(String cssSelector, String value, Integer timeout) throws ChromiumException {
+        LogService.debug("Action fill input in css selector: " + cssSelector);
         executeScript(cssSelector, value);
         for (Integer i = 0; i <= timeout * 5; i++) {
             Element element = browser.actions.getElement(cssSelector, 0, 50);

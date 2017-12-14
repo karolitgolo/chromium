@@ -39,7 +39,6 @@ public class NavigateToAjaxTest extends BrowserTest implements IBrowserTest {
         Assert.assertTrue(elementOld.text().contains("old content"));
         browser.actions.waitElement("#container:contains(New content)", 7);
         Element element = browser.actions.getElement("#container", 8, 100);
-        System.out.println(element.text());
         Assert.assertTrue(element.text().contains("New content"));
     }
 
